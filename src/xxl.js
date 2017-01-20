@@ -1,14 +1,16 @@
 #!/usr/bin/env node
+
+/* eslint-disable no-console */
 /* --
 ```
-  Usage: node_modules/.bin/xxl [options]
+  Usage: xxl [options]
 
   Options:
 
     -h, --help                   output usage information
     -V, --version                output the version number
-    --src [srcDirs]              e.g. "[\"server\", \"client\", \"common\"]"
-    -e, --exclude [excludeDirs]  e.g. "[\"playground\", \"preRendered\"]"
+    --src [srcDirs]              source directories (comma-separated)
+    -e, --exclude [excludeDirs]  excluded path fragments (comma-separated)
 ```
 -- */
 import path from 'path';
@@ -16,7 +18,7 @@ import fs from 'fs';
 import program from 'commander';
 import diveSync from 'diveSync';
 import sloc from 'sloc';
-import { mainStory, chalk } from 'storyboard';
+import chalk from 'chalk';
 import packageJson from '../package.json';
 
 const EXTENSION_MAPPING = {
@@ -29,21 +31,21 @@ const EXTENSION_MAPPING = {
   '.css': 'css',
 };
 
-const DEFAULT_SOURCES = ['src'];
-const DEFAULT_EXCLUDE = ['playground', 'preRendered'];
+const DEFAULT_SOURCES = 'src';
+const DEFAULT_EXCLUDE = '';
 
 program
   .version(packageJson.version)
   .option('--src [srcDirs]',
-    'e.g. "[\\"server\\", \\"client\\", \\"common\\"]"',
-    JSON.stringify(DEFAULT_SOURCES))
+    'source directories (comma-separated)',
+    DEFAULT_SOURCES)
   .option('-e, --exclude [excludeDirs]',
-    'e.g. "[\\"playground\\", \\"preRendered\\"]"',
-    JSON.stringify(DEFAULT_EXCLUDE))
+    'excluded path fragments (comma-separated)',
+    DEFAULT_EXCLUDE)
   .parse(process.argv);
 
-program.src = JSON.parse(program.src);
-program.exclude = JSON.parse(program.exclude);
+program.src = program.src.split(/\s*,\s*/);
+program.exclude = program.exclude ? program.exclude.split(/\s*,\s*/) : [];
 
 const getInitialStats = () => ({
   filesProcessed: 0,
@@ -57,7 +59,7 @@ const getInitialStats = () => ({
   extensions: {},
 });
 
-const filterOutPaths = thePath => {
+const filterOutPaths = (thePath) => {
   for (let i = 0; i < program.exclude.length; i++) {
     if (thePath.indexOf(program.exclude[i]) >= 0) return true;
   }
@@ -68,18 +70,32 @@ const totalStats = getInitialStats();
 
 const addStats = (stats, newStats, ext) => {
   /* eslint-disable no-param-reassign */
-  stats.filesProcessed++;
-  Object.keys(newStats).forEach(k => { stats[k] += newStats[k]; });
+  stats.filesProcessed += 1;
+  Object.keys(newStats).forEach((k) => { stats[k] += newStats[k]; });
   stats.extensions[ext] = stats.extensions[ext] == null ? 1 : stats.extensions[ext] + 1;
   /* eslint-enable no-param-reassign */
 };
 
-const processDir = srcPath => {
-  mainStory.info('xxl', `Processing ${chalk.cyan.bold(srcPath)}...`);
+const logStats = (title, stats) => {
+  console.log(`Stats: ${chalk.cyan.bold(title)}:`);
+  Object.keys(stats).forEach((key) => {
+    if (key !== 'extensions') {
+      console.log(`  ${key} ${chalk.blue.bold(stats[key])}`);
+    } else {
+      console.log('  extensions:');
+      Object.keys(stats.extensions).forEach((ext) => {
+        console.log(`    ${ext} ${chalk.blue.bold(stats.extensions[ext])}`);
+      });
+    }
+  });
+};
+
+const processDir = (srcPath) => {
+  console.log(`Processing ${chalk.cyan.bold(srcPath)}...`);
   const partialStats = getInitialStats();
   diveSync(path.normalize(srcPath), (err, filePath0) => {
     if (err) {
-      mainStory.error('xxl', '', { attach: err });
+      console.log(chalk.red.bold(err.stack));
       return;
     }
     const filePath = path.normalize(filePath0);
@@ -92,12 +108,10 @@ const processDir = srcPath => {
     addStats(totalStats, stats, ext);
     addStats(partialStats, stats, ext);
   });
-  if (program.src.length > 1) {
-    mainStory.info('xxl', `Stats for ${chalk.cyan.bold(srcPath)}:`, { attach: partialStats });
-  }
+  if (program.src.length > 1) logStats(srcPath, partialStats);
 };
 
 program.src.forEach(processDir);
 
-if (program.src.length > 1) mainStory.info('xxl', '');
-mainStory.info('xxl', `${chalk.cyan.bold('TOTAL')} stats:`, { attach: totalStats });
+if (program.src.length > 1) console.log('');
+logStats('TOTAL', totalStats);
