@@ -1,5 +1,4 @@
 /* eslint-disable strict, indent, max-len, quote-props */
-'use strict';
 
 // ===============================================
 // Basic config
@@ -12,7 +11,7 @@ const KEYWORDS = ['loc', 'statistics'];
 // ===============================================
 // Helpers
 // ===============================================
-const runMultiple = arr => arr.join(' && ');
+const runMultiple = (arr) => arr.join(' && ');
 
 // ===============================================
 // Specs
@@ -102,7 +101,7 @@ const specs = {
 // ===============================================
 // Build package.json
 // ===============================================
-const _sortDeps = deps => {
+const _sortDeps = (deps) => {
   const newDeps = {};
   for (const key of Object.keys(deps).sort()) {
     newDeps[key] = deps[key];
