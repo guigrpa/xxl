@@ -77,7 +77,7 @@ const specs = {
   },
 
   devDependencies: {
-    'extract-docs': '^1.0.0',
+    'extract-docs': '^1.4.0',
     'cross-env': '^1.0.7',
 
     // Babel (except babel-eslint)
