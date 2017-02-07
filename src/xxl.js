@@ -46,6 +46,7 @@ program
 
 program.src = program.src.split(/\s*,\s*/);
 program.exclude = program.exclude ? program.exclude.split(/\s*,\s*/) : [];
+program.exclude = program.exclude.map((o) => o.replace(/[\/,\\]/g, path.sep));
 
 const getInitialStats = () => ({
   filesProcessed: 0,
