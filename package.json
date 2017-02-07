@@ -1,6 +1,6 @@
 {
   "name": "xxl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LOC statistics for multiple directories",
   "bin": {
     "xxl": "lib/xxl.js"

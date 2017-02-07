@@ -4,7 +4,7 @@
 // Basic config
 // ===============================================
 const NAME = 'xxl';
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const DESCRIPTION = 'LOC statistics for multiple directories';
 const KEYWORDS = ['loc', 'statistics'];
 
