@@ -73,7 +73,8 @@ const specs = {
     'sloc': '0.1.10',
     'timm': '^1.2.3',
     'commander': '2.9.0',
-    'chalk': '1.1.3',
+    'storyboard': '^3.0.0-rc.2',
+    'storyboard-preset-console': '^3.0.0-rc.2',
   },
 
   devDependencies: {

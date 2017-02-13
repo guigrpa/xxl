@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
 /* --
 ```
   Usage: xxl [options]
@@ -13,12 +12,13 @@
     -e, --exclude [excludeDirs]  excluded path fragments (comma-separated)
 ```
 -- */
+import 'storyboard-preset-console';
 import path from 'path';
 import fs from 'fs';
 import program from 'commander';
 import diveSync from 'diveSync';
 import sloc from 'sloc';
-import chalk from 'chalk';
+import { mainStory, chalk } from 'storyboard';
 import packageJson from '../package.json';
 
 const EXTENSION_MAPPING = {
@@ -78,25 +78,25 @@ const addStats = (stats, newStats, ext) => {
 };
 
 const logStats = (title, stats) => {
-  console.log(`Stats: ${chalk.cyan.bold(title)}:`);
+  mainStory.info('xxl', `Stats: ${chalk.cyan.bold(title)}:`);
   Object.keys(stats).forEach((key) => {
     if (key !== 'extensions') {
-      console.log(`  ${key} ${chalk.blue.bold(stats[key])}`);
+      mainStory.info('xxl', `  ${key} ${chalk.blue.bold(stats[key])}`);
     } else {
-      console.log('  extensions:');
+      mainStory.info('xxl', '  extensions:');
       Object.keys(stats.extensions).forEach((ext) => {
-        console.log(`    ${ext} ${chalk.blue.bold(stats.extensions[ext])}`);
+        mainStory.info('xxl', `    ${ext} ${chalk.blue.bold(stats.extensions[ext])}`);
       });
     }
   });
 };
 
 const processDir = (srcPath) => {
-  console.log(`Processing ${chalk.cyan.bold(srcPath)}...`);
+  mainStory.info('xxl', `Processing ${chalk.cyan.bold(srcPath)}...`);
   const partialStats = getInitialStats();
   diveSync(path.normalize(srcPath), (err, filePath0) => {
     if (err) {
-      console.log(chalk.red.bold(err.stack));
+      mainStory.info('xxl', chalk.red.bold(err.stack));
       return;
     }
     const filePath = path.normalize(filePath0);
@@ -114,5 +114,5 @@ const processDir = (srcPath) => {
 
 program.src.forEach(processDir);
 
-if (program.src.length > 1) console.log('');
+if (program.src.length > 1) mainStory.info('xxl', '');
 logStats('TOTAL', totalStats);
