@@ -42,6 +42,7 @@ program
   .option('-e, --exclude [excludeDirs]',
     'excluded path fragments (comma-separated)',
     DEFAULT_EXCLUDE)
+  .option('v, --verbose')
   .parse(process.argv);
 
 program.src = program.src.split(/\s*,\s*/);
@@ -104,6 +105,9 @@ const processDir = (srcPath) => {
     const ext = path.extname(filePath);
     const processor = EXTENSION_MAPPING[ext];
     if (!processor) return;
+    if (program.verbose) {
+      mainStory.debug('xxl', `Processing ${chalk.cyan.bold(filePath)}...`);
+    }
     const code = fs.readFileSync(filePath, 'utf8');
     const stats = sloc(code, processor);
     addStats(totalStats, stats, ext);

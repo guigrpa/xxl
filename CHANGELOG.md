@@ -1,5 +1,7 @@
 # Changelog
 
+* Add **`--verbose` flag** (lists all files that are processed).
+
 ## 1.1.0 (Feb 13, 2017)
 
 * Re-introduce `storyboard` (now with a very fast installation).
