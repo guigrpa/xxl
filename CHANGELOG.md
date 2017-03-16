@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.2.0 (Mar 16, 2017)
+
 * Add **`--verbose` flag** (lists all files that are processed).
 
 ## 1.1.0 (Feb 13, 2017)

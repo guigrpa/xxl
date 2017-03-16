@@ -47,7 +47,9 @@ program
 
 program.src = program.src.split(/\s*,\s*/);
 program.exclude = program.exclude ? program.exclude.split(/\s*,\s*/) : [];
+/* eslint-disable no-useless-escape */
 program.exclude = program.exclude.map((o) => o.replace(/[\/,\\]/g, path.sep));
+/* eslint-enable no-useless-escape */
 
 const getInitialStats = () => ({
   filesProcessed: 0,
@@ -58,6 +60,7 @@ const getInitialStats = () => ({
   block: 0,
   mixed: 0,
   empty: 0,
+  todo: 0,
   extensions: {},
 });
 
