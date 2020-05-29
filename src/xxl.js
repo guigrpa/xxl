@@ -12,14 +12,16 @@
     -e, --exclude [excludeDirs]  excluded path fragments (comma-separated)
 ```
 -- */
-import 'storyboard-preset-console';
 import path from 'path';
 import fs from 'fs';
 import program from 'commander';
 import diveSync from 'diveSync';
 import sloc from 'sloc';
-import { mainStory, chalk } from 'storyboard';
+import { mainStory, chalk, addListener } from 'storyboard';
+import consoleListener from 'storyboard-listener-console';
 import packageJson from '../package.json';
+
+addListener(consoleListener);
 
 const EXTENSION_MAPPING = {
   '.coffee': 'coffee',
@@ -36,12 +38,16 @@ const DEFAULT_EXCLUDE = '';
 
 program
   .version(packageJson.version)
-  .option('--src [srcDirs]',
+  .option(
+    '--src [srcDirs]',
     'source directories (comma-separated)',
-    DEFAULT_SOURCES)
-  .option('-e, --exclude [excludeDirs]',
+    DEFAULT_SOURCES
+  )
+  .option(
+    '-e, --exclude [excludeDirs]',
     'excluded path fragments (comma-separated)',
-    DEFAULT_EXCLUDE)
+    DEFAULT_EXCLUDE
+  )
   .option('v, --verbose')
   .parse(process.argv);
 
@@ -76,8 +82,11 @@ const totalStats = getInitialStats();
 const addStats = (stats, newStats, ext) => {
   /* eslint-disable no-param-reassign */
   stats.filesProcessed += 1;
-  Object.keys(newStats).forEach((k) => { stats[k] += newStats[k]; });
-  stats.extensions[ext] = stats.extensions[ext] == null ? 1 : stats.extensions[ext] + 1;
+  Object.keys(newStats).forEach((k) => {
+    stats[k] += newStats[k];
+  });
+  stats.extensions[ext] =
+    stats.extensions[ext] == null ? 1 : stats.extensions[ext] + 1;
   /* eslint-enable no-param-reassign */
 };
 
@@ -89,7 +98,10 @@ const logStats = (title, stats) => {
     } else {
       mainStory.info('xxl', '  extensions:');
       Object.keys(stats.extensions).forEach((ext) => {
-        mainStory.info('xxl', `    ${ext} ${chalk.blue.bold(stats.extensions[ext])}`);
+        mainStory.info(
+          'xxl',
+          `    ${ext} ${chalk.blue.bold(stats.extensions[ext])}`
+        );
       });
     }
   });

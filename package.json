@@ -35,8 +35,8 @@
     "commander": "2.9.0",
     "diveSync": "0.3.0",
     "sloc": "^0.2.0",
-    "storyboard": "^3.1.1",
-    "storyboard-preset-console": "^3.1.1",
+    "storyboard": "^3.2.1",
+    "storyboard-listener-console": "^3.1.4",
     "timm": "^1.2.4"
   },
   "devDependencies": {
@@ -52,6 +52,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "extract-docs": "^1.4.0"
+    "extract-docs": "^1.4.0",
+    "prettier": "^2.0.5"
   }
 }
