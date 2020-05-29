@@ -1,7 +1,3 @@
-# Changelog
-
-## 1.3.0 (May 29, 2020)
-
 - Add TypeScript support.
 
 ## 1.2.0 (Mar 16, 2017)
