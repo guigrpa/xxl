@@ -27,6 +27,8 @@ const EXTENSION_MAPPING = {
   '.coffee': 'coffee',
   '.js': 'js',
   '.jsx': 'jsx',
+  '.ts': 'ts',
+  '.tsx': 'tsx',
   '.cjsx': 'coffee',
   '.html': 'html',
   '.sass': 'scss',
